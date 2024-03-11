@@ -11,10 +11,10 @@ namespace GuestWiFiManager.Components.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<GetPythonApiResponseDetails> PythonAPIGetAccessDetails()
+        public async Task<DataResponse> PythonAPIGetAccessDetails()
         {
             // hardcoded username due to the lack of logging implementation yet
-            return await httpClient.GetFromJsonAsync<GetPythonApiResponseDetails>("pythonapi/get/CK01");
+            return await httpClient.GetFromJsonAsync<DataResponse>("pythonapi/get/CK01");
         }
 
         public async Task<PutPythonApiResponseDetails> PythonAPISetAccess(string name, string duration, string userID)

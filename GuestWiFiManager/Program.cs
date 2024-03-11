@@ -19,6 +19,8 @@ builder.Services.AddHttpClient<IResponseDetailsService, ResponseDetailsService>(
 //needed to call python api just once
 builder.Services.AddScoped<StateObject>();
 
+builder.Services.AddBlazorBootstrap();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

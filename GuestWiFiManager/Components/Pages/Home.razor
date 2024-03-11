@@ -1,7 +1,40 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@inherits HomeBase
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (isErrorAnywhere == true)
+{
+    @errorMessage
 
-Welcome to your new app.
+    <Modal @ref="modal" title="Error" UseStaticBackdrop="true" CloseOnEscape="false">
+        <BodyTemplate>
+            @errorMessage
+        </BodyTemplate>
+        <FooterTemplate>
+            <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Close</Button>
+            <Button Color="ButtonColor.Primary">Understood</Button>
+        </FooterTemplate>
+    </Modal>
+    <br />
+    <p>lambda</p>
+    @(() => OnShowModalClick())
+    <br />
+    <p>normal</p>
+    @OnShowModalClick
+    <br />
+    <p>invoke</p>
+    @OnShowModalClick()
+    <br />
+    
+    <br />
+    <Button Color="ButtonColor.Primary" @onclick="OnShowModalClick">Launch static backdrop modal</Button>
+}
+
+@if (responseDetails.dataResponse != null)
+{
+    @responseDetails.dataResponse.fullName
+}
+
+<Preload LoadingText="Loading..." />
