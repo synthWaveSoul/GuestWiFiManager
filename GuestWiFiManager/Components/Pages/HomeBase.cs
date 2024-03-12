@@ -98,7 +98,17 @@ namespace GuestWiFiManager.Components.Pages
             finally
             {
                 PreloadService.Hide();
+                OnShowModalClick();
             }
+        }
+
+        [Inject]
+        NavigationManager navManager { get; set; }
+
+        protected void afterCloseNewAccess()
+        {
+            OnHideModalClick();
+            navManager.NavigateTo(navManager.Uri, true);
         }
     }
 }

@@ -49,3 +49,29 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+.connection-error {
+    font-size: 4vw;
+}
+
+.font-color-available {
+    color: green;
+}
+
+.font-color-unavailable {
+    color: red;
+}
+
+.formStyle {
+    background-color: rgba(0,0,0,0.08);
+    margin: 25px 0 0 0;
+    padding: 20px;
+    border-radius: 31px 31px 31px 31px;
+    border: 2px solid #000000;
+}
+
+.new-access-detail {
+    font-size: 2em;
+    padding: 5px 0 5px 0;
+    margin: 5px 0 5px 0;
+}

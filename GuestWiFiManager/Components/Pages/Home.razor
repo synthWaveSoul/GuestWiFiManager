@@ -6,35 +6,100 @@
 
 @if (isErrorAnywhere == true)
 {
-    @errorMessage
-
-    <Modal @ref="modal" title="Error" UseStaticBackdrop="true" CloseOnEscape="false">
-        <BodyTemplate>
-            @errorMessage
-        </BodyTemplate>
-        <FooterTemplate>
-            <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Close</Button>
-            <Button Color="ButtonColor.Primary">Understood</Button>
-        </FooterTemplate>
-    </Modal>
-    <br />
-    <p>lambda</p>
-    @(() => OnShowModalClick())
-    <br />
-    <p>normal</p>
-    @OnShowModalClick
-    <br />
-    <p>invoke</p>
-    @OnShowModalClick()
-    <br />
-    
-    <br />
-    <Button Color="ButtonColor.Primary" @onclick="OnShowModalClick">Launch static backdrop modal</Button>
+    <div class="connection-error">@errorMessage</div>
 }
-
-@if (responseDetails.dataResponse != null)
+else if (responseDetails.dataResponse != null)
 {
-    @responseDetails.dataResponse.fullName
+    @if (responseDetails.dataResponse.error != "no_error")
+    {
+        <div class="connection-error">@responseDetails.dataResponse.error</div>
+    }
+    else
+    {
+        <div class="container text-center">
+            <div class="h1">
+                GUEST WI-FI MANAGER
+            </div>
+            <div class="h3" style="margin-top: 20px">
+                <div>
+                    Hi @responseDetails.dataResponse.fullName,
+                </div>
+                <div style="display:inline-flex; margin-top: 7px">
+                    <div>
+                        Access left
+                    </div>
+                    <div class="@(responseDetails.dataResponse.quantity.Equals(0)? "font-color-unavailable" : "font-color-available" )" style="margin-left: 10px">
+                        @responseDetails.dataResponse.quantity
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <form class="form-check-inline formStyle col-12 col-xl-8" @onsubmit="setAccess">
+                    <div class="row mb-3">
+                        <label for="inputName" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" maxlength="40" id="inputName" placeholder="Name of the Visitor" required @bind-value="submitName">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="selectExpire" class="col-sm-3 col-form-label">Expire in days</label>
+                        <div class="col-sm-9">
+                            <select class="form-select" id="selectExpire" @bind="submitDays">
+                                <option selected value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div  class="d-grid gap-2">
+                        <Button Type="ButtonType.Submit" Color="ButtonColor.Success" disabled="@(responseDetails.dataResponse.quantity.Equals(0)? true : false)">SET ACCES</Button>
+                    </div>
+                </form>
+            </div>
+
+            <p style="margin-top: 15px">Please note that Kepak employees from other sites do not need Guest WiFi access as each site share the same password</p>
+        </div>
+    }
 }
+
+<Modal @ref="modal" 
+    Title="Access details"
+    IsVerticallyCentered="true"
+    UseStaticBackdrop="true" 
+    CloseOnEscape="false"
+    ShowCloseButton="false"
+    >
+    <BodyTemplate>
+        @if (isErrorAnywhere == true)
+        {
+            <div class="connection-error">@errorMessage</div>
+        }
+        else
+        {
+            @if (putPythonApiResponseDetails.error != "no_error")
+            {
+                <div class="connection-error">@putPythonApiResponseDetails.error</div>
+            }
+            else
+            {
+                <div class="new-access-detail">
+                    <div style="font-weight: 700;">Login: </div><div>@putPythonApiResponseDetails.merakiEmail</div>
+                </div>
+                <div class="new-access-detail">
+                    <div style="font-weight: 700;">Password: </div><div>@putPythonApiResponseDetails.password</div>
+                </div>
+                <div class="new-access-detail">
+                    <div style="font-weight: 700;">Expire: </div><div>@putPythonApiResponseDetails.expire</div>
+                </div>
+            }
+        }
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="afterCloseNewAccess">Close</Button>
+    </FooterTemplate>
+</Modal>
 
 <Preload LoadingText="Loading..." />
