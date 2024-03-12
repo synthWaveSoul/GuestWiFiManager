@@ -4,8 +4,25 @@
 
 <h3>AccessDetails</h3>
 
-
-
-@code {
-
+@if (isErrorAnywhere == true)
+{
+    <div class="connection-error">@errorMessage</div>
+}
+else if (responseDetails.dataResponse != null)
+{
+    @if (responseDetails.dataResponse.error != "no_error")
+    {
+        <div class="connection-error">@responseDetails.dataResponse.error</div>
+    }
+    else
+    {
+        <div class="container">
+            <div class="row">
+                @foreach (var item in responseDetails.dataResponse.accountsHistoryDetails)
+                {
+                    @item.password
+                }
+            </div>
+        </div>
+    }
 }
