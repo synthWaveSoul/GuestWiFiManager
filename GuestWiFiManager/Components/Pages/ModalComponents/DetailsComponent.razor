@@ -1,0 +1,17 @@
+﻿<div class="row">
+    <div class="col-5 col-md-3 text-end" style="font-weight:700">Logon :</div>
+    <div class="col-7 col-md-9">@Login</div>
+</div>
+<div class="row">
+    <div class="col-5 col-md-3 text-end" style="font-weight:700">Password :</div>
+    <div class="col-7 col-md-9">@Password</div>
+</div>
+
+@code {
+
+    [Parameter]
+    public string Login { get; set; }
+
+    [Parameter]
+    public string Password { get; set; }
+}

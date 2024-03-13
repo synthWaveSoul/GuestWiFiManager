@@ -20,9 +20,67 @@ else if (responseDetails.dataResponse != null)
             <div class="row">
                 @foreach (var item in responseDetails.dataResponse.accountsHistoryDetails)
                 {
-                    @item.password
+                    <div class="col-lg-6 col-xl-4 my-3 d-flex justify-content-center">
+                        <Card Color="@(item.isActive.Equals("yes") ? CardColor.Success : CardColor.Secondary)" Style="width:30rem;">
+                            <CardBody>
+                                <CardTitle Size="HeadingSize.H3">@item.name</CardTitle>
+                                <CardText>
+                                        <ul class="list-group list-group-flush" style="text-align:center">
+                                            <li class="list-group-item">
+                                                <div style="display:inline-flex">
+                                                    <div style="font-weight:700">Created</div>
+                                                    <div style="margin-left:10px">@item.createdAt</div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div style="display:inline-flex">
+                                                    <div style="font-weight:700">Expire</div>
+                                                    <div style="margin-left:10px">@item.expires</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                </CardText>
+                                <div  class="d-grid gap-2">
+                                    <Button 
+                                        Disabled="@(item.isActive.Equals("no")? true : false)" 
+                                        Color="ButtonColor.Info"
+                                        @onclick="(() => showDetails(item.merakiEmailLogin, item.password, item.name))"
+                                        Type="ButtonType.Link"
+                                        >Show details
+                                    </Button>
+                                    <Button 
+                                        Disabled="@(item.isActive.Equals("no")? true : false)" 
+                                        Color="ButtonColor.Danger"
+                                        @onclick="(() => confirmRevokeAccess(item.merakiEmailLogin, item.merakiEmailId))"
+                                        Type="ButtonType.Link"
+                                        >Revoke access
+                                    </Button>
+                                </div>
+                            </CardBody>
+                        </Card>
+                    </div>
                 }
             </div>
         </div>
     }
 }
+
+<Modal @ref="modalDetails" IsVerticallyCentered="true" />
+
+<Modal @ref="modalConfirmRevoke" IsVerticallyCentered="true" />
+
+<Modal @ref="modalAfterRevoke"
+       Title="Access revoked"
+       IsVerticallyCentered="true"
+       UseStaticBackdrop="true"
+       CloseOnEscape="false"
+       ShowCloseButton="false">
+    <BodyTemplate>
+        <div>Access revoked correctly, the person will be disconnected from the Internet automatically</div>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="afterCloseRevoke">Close</Button>
+    </FooterTemplate>
+</Modal>
+
+<Preload LoadingText="Loading..." />
