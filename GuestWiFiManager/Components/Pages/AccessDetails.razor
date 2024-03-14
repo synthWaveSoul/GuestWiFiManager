@@ -74,4 +74,25 @@ else if (responseDetails.dataResponse != null)
        ShowCloseButton="false"
        />
 
+<Modal @ref="modalError"
+       Title="Error"
+       IsVerticallyCentered="true"
+       UseStaticBackdrop="true"
+       CloseOnEscape="false"
+       ShowCloseButton="false">
+    <BodyTemplate>
+        @if (isErrorAnywhere == true)
+        {
+            <div class="connection-error">@errorMessage</div>
+        }
+        else
+        {
+            @if (deleteResponseDetails.error != "no_error")
+            {
+                <div class="connection-error">@deleteResponseDetails.error</div>
+            }
+        }
+    </BodyTemplate>
+</Modal>
+
 <Preload LoadingText="Loading..." />

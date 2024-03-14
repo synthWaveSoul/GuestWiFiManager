@@ -18,6 +18,8 @@ namespace GuestWiFiManager.Components.Pages
 
         public Modal modalDetails = default!;
 
+        public Modal modalError = default!;
+
         public Modal modalConfirmRevoke = default!;
 
         public Modal modalAfterRevoke = default!;
@@ -62,15 +64,24 @@ namespace GuestWiFiManager.Components.Pages
             }
             finally
             {
-                PreloadService.Hide();
-                modalConfirmRevoke.HideAsync();
+                if (!isErrorAnywhere && deleteResponseDetails.error == "no_error")
+                {
+                    PreloadService.Hide();
+                    modalConfirmRevoke.HideAsync();
 
-                var detailsParameters = new Dictionary<string, object>();
+                    var detailsParameters = new Dictionary<string, object>();
 
-                detailsParameters.Add("Name", name);
-                detailsParameters.Add("afterCloseRevoke", EventCallback.Factory.Create<MouseEventArgs>(this, afterCloseRevoke));
+                    detailsParameters.Add("Name", name);
+                    detailsParameters.Add("afterCloseRevoke", EventCallback.Factory.Create<MouseEventArgs>(this, afterCloseRevoke));
 
-                await modalAfterRevoke.ShowAsync<RevokeSuccessfulComponent>(title: "Access revoked", parameters: detailsParameters);
+                    await modalAfterRevoke.ShowAsync<RevokeSuccessfulComponent>(title: "Access revoked", parameters: detailsParameters);
+                }
+                else
+                {
+                    PreloadService.Hide();
+                    modalConfirmRevoke.HideAsync();
+                    modalError.ShowAsync();
+                }
             }
         }
 
