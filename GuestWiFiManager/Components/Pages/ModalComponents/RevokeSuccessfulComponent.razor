@@ -1,0 +1,11 @@
+﻿<div style="margin-bottom:15px;">Access revoked correctly, <strong>@Name</strong> is now disconnected from the Internet</div>
+
+<Button Color="ButtonColor.Secondary" @onclick="afterCloseRevoke">Close</Button>
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> afterCloseRevoke { get; set; }
+}

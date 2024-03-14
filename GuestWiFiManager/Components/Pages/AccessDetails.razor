@@ -2,8 +2,6 @@
 @rendermode InteractiveServer
 @inherits AccessDetailsBase
 
-<h3>AccessDetails</h3>
-
 @if (isErrorAnywhere == true)
 {
     <div class="connection-error">@errorMessage</div>
@@ -51,7 +49,7 @@ else if (responseDetails.dataResponse != null)
                                     <Button 
                                         Disabled="@(item.isActive.Equals("no")? true : false)" 
                                         Color="ButtonColor.Danger"
-                                        @onclick="(() => confirmRevokeAccess(item.merakiEmailLogin, item.merakiEmailId))"
+                                        @onclick="(() => confirmRevokeAccess(item.name, item.merakiEmailId))"
                                         Type="ButtonType.Link"
                                         >Revoke access
                                     </Button>
@@ -70,17 +68,10 @@ else if (responseDetails.dataResponse != null)
 <Modal @ref="modalConfirmRevoke" IsVerticallyCentered="true" />
 
 <Modal @ref="modalAfterRevoke"
-       Title="Access revoked"
        IsVerticallyCentered="true"
        UseStaticBackdrop="true"
        CloseOnEscape="false"
-       ShowCloseButton="false">
-    <BodyTemplate>
-        <div>Access revoked correctly, the person will be disconnected from the Internet automatically</div>
-    </BodyTemplate>
-    <FooterTemplate>
-        <Button Color="ButtonColor.Secondary" @onclick="afterCloseRevoke">Close</Button>
-    </FooterTemplate>
-</Modal>
+       ShowCloseButton="false"
+       />
 
 <Preload LoadingText="Loading..." />

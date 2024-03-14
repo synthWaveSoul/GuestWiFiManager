@@ -22,11 +22,6 @@ namespace GuestWiFiManager.Components.Pages
 
         public Modal modalAfterRevoke = default!;
 
-        protected async Task OnShowModalClick()
-        {
-            await modalAfterRevoke.ShowAsync();
-        }
-
         protected async Task OnHideModalClick()
         {
             await modalAfterRevoke.HideAsync();
@@ -53,11 +48,11 @@ namespace GuestWiFiManager.Components.Pages
 
         protected DeletePythonApiResponseDetails deleteResponseDetails { get; set; }
 
-        protected async Task revokeAccess(string merakiEmailIdToRevoke)
+        protected async Task revokeAccess(string merakiEmailIdToRevoke, string name)
         {
             try
             {
-                PreloadService.Show(SpinnerColor.Light, "Loading data, please wait ...");
+                PreloadService.Show(SpinnerColor.Light, "Work in progress, please wait ...");
                 deleteResponseDetails = await responseDetailsService.PythonAPIRevokeAccess(merakiEmailIdToRevoke);
             }
             catch (Exception ex)
@@ -68,41 +63,24 @@ namespace GuestWiFiManager.Components.Pages
             finally
             {
                 PreloadService.Hide();
-                OnShowModalClick();
+                modalConfirmRevoke.HideAsync();
+
+                var detailsParameters = new Dictionary<string, object>();
+
+                detailsParameters.Add("Name", name);
+                detailsParameters.Add("afterCloseRevoke", EventCallback.Factory.Create<MouseEventArgs>(this, afterCloseRevoke));
+
+                await modalAfterRevoke.ShowAsync<RevokeSuccessfulComponent>(title: "Access revoked", parameters: detailsParameters);
             }
         }
-
-        protected async void testRevoke(MouseEventArgs e)
-        {
-            try
-            {
-                PreloadService.Show(SpinnerColor.Light, "Loading data, please wait ...");
-                //deleteResponseDetails = await responseDetailsService.PythonAPIRevokeAccess(id);
-            }
-            catch (Exception ex)
-            {
-                isErrorAnywhere = true;
-                errorMessage = ex.Message;
-            }
-            finally
-            {
-                PreloadService.Hide();
-                OnShowModalClick();
-            }
-        }
-
-        //public void testRevoke22(MouseEventArgs e, string id) => testRevoke(e);
 
         protected async Task confirmRevokeAccess(string name, string id)
         {
             var detailsParameters = new Dictionary<string, object>();
 
             detailsParameters.Add("Name", name);
-            //detailsParameters.Add("Id", id);
-            detailsParameters.Add("revokeAccessConfirmed", EventCallback.Factory.Create<MouseEventArgs>(this, testRevoke));
-            //detailsParameters.Add("revokeAccessConfirmed", Task.Factory.StartNew<MouseEventArgs>(this, revokeAccess(id)));
-            //detailsParameters.Add("revokeAccessConfirmed", Task.Factory.StartNew(() => { revokeAccess(id) ; }));
-            //detailsParameters.Add("revokeAccessConfirmed", Task.Factory.StartNew(revokeAccess(id)));
+            detailsParameters.Add("revokeConfirmed", EventCallback.Factory.Create<MouseEventArgs>(this, arg => { revokeAccess(id, name); }));
+            detailsParameters.Add("revokeCancelled", EventCallback.Factory.Create<MouseEventArgs>(this, arg => { modalConfirmRevoke.HideAsync(); }));
 
             await modalConfirmRevoke.ShowAsync<ConfirmRevokeComponent>(title: "Confirmation", parameters: detailsParameters);
         }
