@@ -7,6 +7,10 @@ namespace GuestWiFiManager.Components.Pages
 {
     public class HomeBase : ComponentBase
     {
+        // for error handling on the page
+        public bool isErrorAnywhere = false;
+        public string errorMessage;
+
         [Inject]
         protected PreloadService PreloadService { get; set; } = default!;
 
@@ -21,12 +25,6 @@ namespace GuestWiFiManager.Components.Pages
         {
             await modal.HideAsync();
         }
-
-        // error state from python api
-        public bool isErrorAnywhere = false;
-
-        // error details from python api
-        public string errorMessage;
 
         [Inject]
         protected IResponseDetailsService responseDetailsService { get; set; }
@@ -105,6 +103,7 @@ namespace GuestWiFiManager.Components.Pages
         [Inject]
         NavigationManager navManager { get; set; }
 
+        // refresh page to refresh data after access is granted
         protected void afterCloseNewAccess()
         {
             OnHideModalClick();

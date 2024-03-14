@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-//store response from python api 
+//store get response from python api 
 builder.Services.AddScoped<GetPythonApiResponseDetails>();
 
 //base URI for python api
