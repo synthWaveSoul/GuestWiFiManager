@@ -37,7 +37,7 @@ namespace GuestWiFiManager.Components.Pages
             try
             {
                 PreloadService.Show(SpinnerColor.Light, "Loading data, please wait ...");
-                responseDetails.dataResponse = await responseDetailsService.PythonAPIGetAccessDetails();
+                responseDetails.dataResponse = await responseDetailsService.PythonAPIGetAccessDetails(userId);
             }
             catch (Exception ex)
             {

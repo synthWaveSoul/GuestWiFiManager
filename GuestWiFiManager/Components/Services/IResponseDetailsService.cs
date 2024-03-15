@@ -4,7 +4,7 @@ namespace GuestWiFiManager.Components.Services
 {
     public interface IResponseDetailsService
     {
-        Task<DataResponse> PythonAPIGetAccessDetails();
+        Task<DataResponse> PythonAPIGetAccessDetails(string userID);
 
         Task<PutPythonApiResponseDetails> PythonAPISetAccess(string name, string duration, string userID);
 
